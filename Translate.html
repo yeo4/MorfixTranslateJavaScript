@@ -1,0 +1,61 @@
+<html>
+<body>
+<input type="text" id='translate'>    
+<button id='GO'>translate</button>
+<div id='div1'></div>
+<p id = 'result'></p>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script> 
+<script>
+    
+    $('#GO').click(function(){
+        if($('#translate').val() != ';-)')
+        {
+            $.get( "https://cors.io/?http://www.morfix.co.il/" + $('#translate').val(), function(data) {
+          //  var html = $.parseHTML(data);
+          $string = data.toString();
+                  $index = $string.search("translation translation_he heTrans");
+            if($index != -1)
+            {
+                $str = $string.substring($index);
+                $index = $str.search("</div>");
+                $str = $str.substring(0,$index);
+                $index = $str.search('">') + 2;
+                $str = $str.substring($index);
+                $('#result').html($str);     
+            }
+            else
+            {
+                $index = $string.indexOf('word">') + 6;
+                if($index != 5)
+                {
+                    //console.log($index);
+                    $str = $string.substring($index);
+                    $index = $str.indexOf("</span>");
+                    $str = $str.substring(0,$index);
+                    $('#result').html($str);  
+                }
+                else {
+                    $index = $string.indexOf('machineTranslateResult">') + 24;
+                if($index != 23)
+                {
+                    //console.log($index);
+                    $str = $string.substring($index);
+                    $index = $str.indexOf("</div>");
+                    $str = $str.substring(0,$index);
+                    $('#result').html($str);  
+                }
+                    else{
+                       $('#result').html('אין תרגום זמין');
+                    }
+                }
+            }
+            });
+        }
+        else{
+            $('#result').html('easter egg');
+        }
+});
+</script>
+</body>
+</html>
